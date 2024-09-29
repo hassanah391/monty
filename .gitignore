@@ -51,8 +51,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 monty
-new_position.c
-newcalculator.c
 newdlinklist.c
 newprint.c
 newstack.c
