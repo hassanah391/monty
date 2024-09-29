@@ -1,23 +1,22 @@
 #include "monty.h"
 
 /**
-* main - an entery for monty interpreter
-* @argc: number of arguments
-* @argv: arguments
-*
-* Return: 0 on success
-*/
+ * main - entry into interpreter
+ * @argc: argc counter
+ * @argv: arguments
+ * Return: 0 on success
+ */
 int main(int argc, char *argv[])
 {
-	int fd, is_push = 0;
-	char *buffer, *token;
+	int fd, ispush = 0;
 	unsigned int line = 1;
-	stack_t *h = NULL;
 	ssize_t n_read;
+	char *buffer, *token;
+	stack_t *h = NULL;
 
 	if (argc != 2)
 	{
-		printf("USAGE: monty file");
+		printf("USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
 	fd = open(argv[1], O_RDONLY);
@@ -27,10 +26,10 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	buffer = malloc(sizeof(char) * 10000);
-	if (buffer == NULL)
+	if (!buffer)
 		return (0);
 	n_read = read(fd, buffer, 10000);
-	if(n_read == -1)
+	if (n_read == -1)
 	{
 		free(buffer);
 		close(fd);
@@ -39,17 +38,17 @@ int main(int argc, char *argv[])
 	token = strtok(buffer, "\n\t\a\r ;:");
 	while (token != NULL)
 	{
-		if (is_push == 1)
+		if (ispush == 1)
 		{
 			push(&h, line, token);
-			is_push = 0;
-			strtok(NULL, "\n\t\a\r ;:");
+			ispush = 0;
+			token = strtok(NULL, "\n\t\a\r ;:");
 			line++;
 			continue;
 		}
 		else if (strcmp(token, "push") == 0)
 		{
-			is_push = 1;
+			ispush = 1;
 			token = strtok(NULL, "\n\t\a\r ;:");
 			continue;
 		}
@@ -72,5 +71,4 @@ int main(int argc, char *argv[])
 	free_dlist(&h); free(buffer);
 	close(fd);
 	return (0);
-
 }
